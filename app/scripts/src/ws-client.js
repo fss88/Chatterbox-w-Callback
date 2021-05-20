@@ -20,13 +20,26 @@ function registerMessageHandler(handlerFunction) {
     };
 }
 
+function registerCloseHandler(handlerFunction) {
+    socket.onclose = (e) => {
+        console.log('closed');
+        handlerFunction();
+    }
+}
+
 function sendMessage(payload) {
     socket.send(JSON.stringify(payload));
+}
+
+function closeSocket() {
+    socket.close();
 }
 
 export default {
     init,
     registerOpenHandler,
     registerMessageHandler,
-    sendMessage
+    sendMessage,
+    registerCloseHandler,
+    closeSocket
 }

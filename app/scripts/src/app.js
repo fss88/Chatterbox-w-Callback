@@ -21,6 +21,11 @@ class ChatApp {
         socket.init('ws://localhost:3001');
         socket.registerOpenHandler(() => {
             this.chatForm.init((data) => {
+                // for testing
+                if(data == 'closeSocket'){
+                    socket.closeSocket();
+                }
+
                 let message = new ChatMessage({ message: data });
                 socket.sendMessage(message.serialize());
             });
@@ -32,6 +37,14 @@ class ChatApp {
 
             let message = new ChatMessage(data);
             this.chatList.drawMessage(message.serialize());
+        });
+
+        socket.registerCloseHandler(() => {
+            if(confirm('Connection lost do you want to reconnect?')){
+                socket.init('ws://localhost:3001');
+
+                location.reload();
+            }
         });
     }
 }
